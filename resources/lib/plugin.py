@@ -20,7 +20,6 @@ from resources.lib.helpers.sessionhelper import SessionHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.textures import TextureHandler
 from resources.lib.paramparser import ParameterParser
-from resources.lib.urihandler import UriHandler
 from resources.lib.channelinfo import ChannelInfo
 from resources.lib.chn_class import Channel
 
@@ -76,18 +75,6 @@ class Plugin(ParameterParser):
             # show notification
             XbmcWrapper.show_notification(None, LanguageHelper.get_localized_string(LanguageHelper.StartingAddonId) % (
                 Config.appName,), fallback=False, logger=Logger)
-
-            # check for updates. Using local import for performance
-            from resources.lib.updater import Updater
-            up = Updater(Config.updateUrl, Config.version,
-                         UriHandler.instance(), Logger.instance(),
-                         AddonSettings.get_release_track())
-
-            if up.is_new_version_available():
-                Logger.info("Found new version online: %s vs %s", up.currentVersion, up.onlineVersion)
-                notification = LanguageHelper.get_localized_string(LanguageHelper.NewVersion2Id)
-                notification = notification % (Config.appName, up.onlineVersion)
-                XbmcWrapper.show_notification(None, lines=notification, display_time=20000)
 
             # check for cache folder
             env_ctrl.cache_check()
